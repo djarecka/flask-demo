@@ -5,7 +5,6 @@ from bokeh.resources import CDN
 from bokeh.embed import components, file_html
 from bokeh.io import output_file, save
 app = Flask(__name__)
-import data_stock
 
 app.vars={}
 
