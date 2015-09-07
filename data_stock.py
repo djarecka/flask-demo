@@ -1,14 +1,15 @@
 import Quandl
 import pandas
-import pdb
 import datetime
 
-#TODO ticker symbol i miesiace
-def monthly_data(ticker_symbol, var_list=["Close"]):
+
+def monthly_data(ticker_symbol, var_list):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
     month_ago = datetime.datetime.now().replace(month=datetime.datetime.now().month-1).strftime("%Y-%m-%d")
-
+    # using quandl library to get data for last month
     mydata = Quandl.get("WIKI/"+ticker_symbol, trim_start=month_ago, trim_end=today)
+
+    # creating dict. to write requested features
     data = {}
     for var in var_list:
         data[var] = mydata[var]

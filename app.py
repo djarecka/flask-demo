@@ -3,8 +3,7 @@ from flask import Flask, render_template, request, redirect
 import pdb
 from bokeh.plotting import figure
 from bokeh.resources import CDN
-from bokeh.embed import components, file_html
-from bokeh.io import output_file, save
+from bokeh.embed import file_html
 app = Flask(__name__)
 
 app.vars={}
@@ -15,40 +14,24 @@ def index():
   if request.method == 'GET':
     return render_template('questions.html')
   else:
-    #request was a POST                                                            
-
+    # reading data provided by an user
     app.vars['ticker'] = request.form['ticker']
     app.vars['features'] = request.form.getlist("features")
-    #pdb.set_trace()
+    # reading requested data from quandl website
     app.vars['data'] = ds.monthly_data(app.vars['ticker'], var_list=app.vars['features'])
-    #pdb.set_trace()
-    #f = open('test.txt', 'w')
-    #f.write('Name: %s\n'%(app.vars['ticker']))
-    #f.close()
-    #pdb.set_trace()
-    plot = figure(title="plot testowy", x_axis_label='x', y_axis_label='y', x_axis_type="datetime")
+
+    # plotting data using bokeh
+    plot = figure(title="data from Quandl WIKI", x_axis_label='date', x_axis_type="datetime")
     colors = ["red", "blue", "green"]
     for i, var in enumerate(app.vars['features']):
       plot.line(app.vars['data']["time"], app.vars['data'][var], color=colors[i], legend=var)
     app.vars["html"] = file_html(plot, CDN, "my_plot")
-    #f_t = open('templates/plot_test.html', 'w')
-    #f_t.write(html)
-    #f_t.close()
 
-    #output_file("templates/plot_test.html", title='My Plot')
-    #save(plot)
-
-    #app.vars["script"], div = components(plot)
-    #return render_template('index.html')
     return redirect('/ploting')
 
-#@app.route('/')
-#def main():
-#  return redirect('/index')
 
 @app.route('/ploting')
 def ploting():
-  #pdb.set_trace()
   return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"])
 
 if __name__ == '__main__':
