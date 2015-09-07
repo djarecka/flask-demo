@@ -18,21 +18,25 @@ def index():
     #request was a POST                                                            
 
     app.vars['ticker'] = request.form['ticker']
-    app.vars['cos'] = ds.monthly_data(app.vars['ticker'])
+    app.vars['features'] = request.form.getlist("features")
     #pdb.set_trace()
-    f = open('test.txt', 'w')
-    f.write('Name: %s\n'%(app.vars['ticker']))
-    f.close()
-
-    plot = figure(title="plot testowy", x_axis_label='x', y_axis_label='y')
-    plot.line([1,2], [3,4])
+    app.vars['data'] = ds.monthly_data(app.vars['ticker'], var_list=app.vars['features'])
+    #pdb.set_trace()
+    #f = open('test.txt', 'w')
+    #f.write('Name: %s\n'%(app.vars['ticker']))
+    #f.close()
+    #pdb.set_trace()
+    plot = figure(title="plot testowy", x_axis_label='x', y_axis_label='y', x_axis_type="datetime")
+    colors = ["red", "blue", "green"]
+    for i, var in enumerate(app.vars['features']):
+      plot.line(app.vars['data']["time"], app.vars['data'][var], color=colors[i], legend=var)
     app.vars["html"] = file_html(plot, CDN, "my_plot")
     #f_t = open('templates/plot_test.html', 'w')
     #f_t.write(html)
     #f_t.close()
 
-    output_file("templates/plot_test.html", title='My Plot')
-    save(plot)
+    #output_file("templates/plot_test.html", title='My Plot')
+    #save(plot)
 
     #app.vars["script"], div = components(plot)
     #return render_template('index.html')
@@ -45,7 +49,7 @@ def index():
 @app.route('/ploting')
 def ploting():
   #pdb.set_trace()
-  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"]+str(app.vars['cos']))
+  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"])
 
 if __name__ == '__main__':
   app.run(port=33507,debug=True)
