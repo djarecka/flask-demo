@@ -1,3 +1,10 @@
+# My application
+
+This repository contains my changes - please, see the [final application](http://agile-peak-7291.herokuapp.com/index).
+
+The general information about Flask/Heroku and the project are below.
+
+
 # Flask on Heroku
 
 This project is intended to help you tie together some important concepts and
