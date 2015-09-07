@@ -44,7 +44,7 @@ def index():
 @app.route('/ploting')
 def ploting():
   #pdb.set_trace()
-  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"])
+  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"+Quandl.__version__])
 
 if __name__ == '__main__':
   app.run(port=33507,debug=True)
