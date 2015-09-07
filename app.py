@@ -1,4 +1,4 @@
-import Quandl
+import data_stock as ds
 from flask import Flask, render_template, request, redirect
 import pdb
 from bokeh.plotting import figure
@@ -18,6 +18,7 @@ def index():
     #request was a POST                                                            
 
     app.vars['ticker'] = request.form['ticker']
+    app.vars['cos'] = ds.monthly_data(app.vars['ticker'])
     #pdb.set_trace()
     f = open('test.txt', 'w')
     f.write('Name: %s\n'%(app.vars['ticker']))
@@ -44,7 +45,7 @@ def index():
 @app.route('/ploting')
 def ploting():
   #pdb.set_trace()
-  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"]+Quandl.__version__)
+  return render_template("plot.html", skrypt=app.vars["html"], name=app.vars["ticker"]+str(app.vars['cos']))
 
 if __name__ == '__main__':
   app.run(port=33507,debug=True)
