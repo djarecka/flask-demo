@@ -1,3 +1,4 @@
+import Quandl
 from flask import Flask, render_template, request, redirect
 import pdb
 from bokeh.plotting import figure
